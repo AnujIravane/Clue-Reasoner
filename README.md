@@ -3,8 +3,9 @@
 ## Installation
 
 Requires [zchaff](https://www.princeton.edu/~chaff/zchaff.html)  
-Once downloaded, extract to directory, then run make (requires g++ compiler) in the directory  
-Copy the zchaff executable into your path (echo $PATH will show path directories)
+A zchaff executable is included in this repository  
+Copy the executable into your path (echo $PATH to find directories on path)  
+**Don't move the file as it is still required in the project directory**
 
 ## Usage
 
