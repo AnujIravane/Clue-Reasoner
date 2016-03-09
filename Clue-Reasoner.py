@@ -19,13 +19,8 @@ def getPairNumFromPositions(player,card):
 
 
 def initialClauses():
-    global players
-    global locations
-    global weapons
-    global rooms
-    global cards
-    global suspects
-    global caseFile
+    global players, locations, weapons, rooms, cards, suspects, caseFile
+
     clauses = []
 
     # Each card is in at least one place (including case file).
@@ -62,6 +57,7 @@ def initialClauses():
                 clauses.append([(-1)*getPairNumFromNames(caseFile,w1), (-1)*getPairNumFromNames(caseFile,w2)])
 
     return clauses
+# end initialClauses
 
 
 def hand(player,cards):
@@ -96,11 +92,8 @@ def suggest(suggester,card1,card2,card3,refuter,cardShown):
             suggesterIndex += 1 
             suggesterIndex %= len(players)
 
-
-
-
     return clauses
-
+# end suggest
 
 
 
@@ -120,9 +113,52 @@ def accuse(accuser,card1,card2,card3,isCorrect):
         clauses.append([(-1)*getPairNumFromNames(caseFile,card1),(-1)*getPairNumFromNames(caseFile,card2),(-1)*getPairNumFromNames(caseFile,card3)])
 
     return clauses
+# end accuse
 
+def makeMove(clauses):
+    global players, weapons, rooms
 
+    guess = []
 
+    hasCard = False
+
+    for pcard in players:
+        for player in players:
+            if (query(player,pcard,clauses)):
+                hasCard = True
+                break
+        if (not hasCard):
+            guess.append(pcard)
+            break
+        else:
+            hasCard = False
+
+    hasCard = False
+    for wcard in weapons:
+        for player in players:
+            if (query(player,wcard,clauses)):
+                hasCard = True
+                break
+        if (not hasCard):
+            guess.append(wcard)
+            break
+        else:
+            hasCard = False
+
+    hasCard = False
+    for wcard in weapons:
+        for player in players:
+            if (query(player,wcard,clauses)):
+                hasCard = True
+                break
+        if (not hasCard):
+            guess.append(wcard)
+            break
+        else:
+            hasCard = False
+
+    return guess
+# end makeMove
 
 
 def query(player,card,clauses):
@@ -137,6 +173,8 @@ def queryString(returnCode):
         return '-'
 
 def printNotepad(clauses):
+    global players, caseFile, cards
+
     for player in players:
         print '\t', player,
     print '\t', caseFile
