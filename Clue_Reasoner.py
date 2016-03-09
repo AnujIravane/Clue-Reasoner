@@ -122,6 +122,8 @@ def makeMove(clauses):
 
     hasCard = False
 
+
+    # Account for if player knows all of one category 
     for pcard in players:
         for player in players:
             if (query(player,pcard,clauses)):
