@@ -7,8 +7,9 @@ Term project for EECS 371
 ## Installation
 
 Requires [zchaff](https://www.princeton.edu/~chaff/zchaff.html)  
-A zchaff executable is included in this repository  
-Copy the executable into your path (echo $PATH to find directories on path)  
+The zchaff installation directory is included in this repository  
+Move into the directory, and run make clean, then run make  
+Copy the zchaff executable into your path (echo $PATH to find directories on path)  
 **Don't move the file as it is still required in the project directory**
 
 ## Usage
