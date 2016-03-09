@@ -2,7 +2,7 @@
 
 Term project for EECS 371  
 ### Team Members
-@k-jin, @AnujIravane, @jnbohrer
+[k-jin](https://github.com/k-jin),[AnujIravane](https://github.com/AnujIravane),[jnbohrer](https://github.com/jnbohrer)
 
 ## Installation
 
