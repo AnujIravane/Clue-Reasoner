@@ -1,5 +1,9 @@
 # Clue-Reasoner
 
+Term project for EECS 371  
+### Team Members
+@k-jin, @AnujIravane, @jnbohrer
+
 ## Installation
 
 Requires [zchaff](https://www.princeton.edu/~chaff/zchaff.html)  
