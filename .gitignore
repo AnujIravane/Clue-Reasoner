@@ -1,2 +1,7 @@
 .DS_Store
 *.o
+
+zchaff64/libsat.a
+zchaff64/zchaff
+zchaff64/zchaff_c_wrapper.cpp
+zchaff64/zchaff_cpp_wrapper.cpp
