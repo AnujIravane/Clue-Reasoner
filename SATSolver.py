@@ -20,7 +20,7 @@ def testKb(clauses):
     #stdout,stderr = process.communicate()
     #print stdout
     ##result = stdout.read().split()
-    result1 = subprocess.check_output('~/Downloads/zchaff64/zchaff ~/Clue-Reasoner/query.cnf',shell=True)
+    result1 = subprocess.check_output('zchaff query.cnf',shell=True)
     result = result1.split()
     ##stdout.close()
     it = iter(result)

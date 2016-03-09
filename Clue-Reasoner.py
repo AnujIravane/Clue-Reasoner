@@ -141,7 +141,7 @@ def printNotepad(clauses):
         print '\t', player,
     print '\t', caseFile
     for card in cards:
-        print card,'\t',
+        print card,'\t\t',
         for player in players:
             print queryString(query(player,card,clauses)),'\t',
         print queryString(query(caseFile,card,clauses))
