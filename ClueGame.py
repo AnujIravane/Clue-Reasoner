@@ -66,7 +66,7 @@ class ClueGame:
             else:
                 print self.playerReasoners[self.playerTurn].name + " SUGGESTS " + guess[0] + " killed with a " + guess[1] + " in the " + guess[2] + ". Not refuted."
 
-            for j in range(0,numPlayers-1):
+            for j in range(0,numPlayers):
                 if not(refuteResult is None):
                     if (j==self.playerTurn):
                     	if(self.playerReasoners[j].type == "reasoner"):
