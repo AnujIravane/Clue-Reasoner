@@ -10,13 +10,18 @@ cards = suspects + weapons + rooms
 numPlayers = 6
 # Initialize important variables
 class ClueGame:
-    def __init__(self):
+    def __init__(self, totalPlayers=6):
+    	if (totalPlayers < 1) or (totalPlayers > 6):
+    		print "please enter between 1 and 6 players"
+    		exit(10)
+    	global numPlayers
         self.playerReasoners = []
         self.playerTurn = 0
+        numPlayers = totalPlayers
         cards = suspects + weapons + rooms
         random.shuffle(cards)
         self.hands = {}
-        caseFile.append(players[random.randint(0,len(players)-1)])
+        caseFile.append(suspects[random.randint(0,len(suspects)-1)])
         caseFile.append(weapons[random.randint(0,len(weapons)-1)])
         caseFile.append(rooms[random.randint(0,len(suspects)-1)])
         print "case file:",caseFile
@@ -57,6 +62,7 @@ class ClueGame:
                 print self.playerReasoners[self.playerTurn].name + " SUGGESTS " + guess[0] + " killed with a " + guess[1] + " in the " + guess[2] + ". Refuted by " + self.playerReasoners[index].name + " with card " + refuteResult
             else:
                 print self.playerReasoners[self.playerTurn].name + " SUGGESTS " + guess[0] + " killed with a " + guess[1] + " in the " + guess[2] + ". Not refuted."
+
             for j in range(0,numPlayers-1):
                 if not(refuteResult is None):
                     if (j==self.playerTurn):
