@@ -1,6 +1,7 @@
 #player class
 
 import ClueGame, SATSolver
+import random
 
 # Initialize important variables
 caseFile = "casefile"
@@ -27,7 +28,7 @@ class CluePlayer
         rooms = ClueGame.rooms
         players = ClueGame.players
         if (type == "reasoner"):
-            guess = self.makeMoveReasoner        
+            guess = self.makeMoveReasoner()       
 
     # Initialize important variables
 
@@ -136,6 +137,16 @@ class CluePlayer
     
         return clauses
     # end accuse
+
+    def refute(cards):
+        temp = [0,1,2]
+        random.shuffle(temp)
+        for i in temp:
+            for card in cards:
+                if (query(hand[i]) == card):
+                    return card
+        return None
+
     
     def makeMoveReasoner(clauses,hand):
         global players, suspects, weapons, rooms, locations, caseFile
