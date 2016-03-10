@@ -11,12 +11,11 @@ numPlayers = 6
 # Initialize important variables
 class ClueGame:
     def __init__(self):
-        # nothing to see here. Move along
         self.playerReasoners = []
         self.playerTurn = 0
+        cards = suspects + weapons + rooms
         random.shuffle(cards)
         self.hands = {}
-
         caseFile.append(players[random.randint(0,len(players)-1)])
         caseFile.append(weapons[random.randint(0,len(weapons)-1)])
         caseFile.append(rooms[random.randint(0,len(suspects)-1)])
@@ -31,6 +30,8 @@ class ClueGame:
 
         for j in xrange(0,len(cards)):
             self.hands[j%numPlayers].append(cards[j])
+
+        cards = suspects + weapons + rooms
             
         for k in xrange(0, numPlayers):
             self.playerReasoners.append(CluePlayer.CluePlayer(players[k],self.hands[k],"reasoner"))
@@ -38,6 +39,7 @@ class ClueGame:
     def startGame(self):
         while (self.playNextTurn()):
             self.playerTurn = (self.playerTurn + 1)%numPlayers
+        del caseFile[:]
     
     def playNextTurn(self):
         guess = self.playerReasoners[self.playerTurn].makeMove()
@@ -55,7 +57,7 @@ class ClueGame:
                 print self.playerReasoners[self.playerTurn].name + " SUGGESTS " + guess[0] + " killed with a " + guess[1] + " in the " + guess[2] + ". Refuted by " + self.playerReasoners[index].name + " with card " + refuteResult
             else:
                 print self.playerReasoners[self.playerTurn].name + " SUGGESTS " + guess[0] + " killed with a " + guess[1] + " in the " + guess[2] + ". Not refuted."
-            for j in range(0,numPlayers):
+            for j in range(0,numPlayers-1):
                 if not(refuteResult is None):
                     if (j==self.playerTurn):
                         self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,refuteResult)
