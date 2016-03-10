@@ -24,6 +24,6 @@ game.startGame()
 ```
 You can create and run multiple games as long as startGame() is called on the previous game before creating the next game.  
 You can specify how many players to include in the game (between 2 and 6, inclusive) by passing the number to ClueGame().  
-The default number of reasoners for a game is 6. Example of altering reasoner number:  
-`game= ClueGame.ClueGame(4)`  
-would create a game with 4 reasoners.
+The default number of reasoners for a game is 6. Example of altering human and reasoner number:  
+`game= ClueGame.ClueGame(1,4)`  
+would create a game with 1 human and 4 reasoners for 5 total players.
