@@ -14,5 +14,12 @@ Copy the zchaff executable into your path (echo $PATH to find directories on pat
 
 ## Usage
 
-Run Clue-Reasoner.py with python to use  
-If there is an error when run, navigate to the zchaff64 directory and run make clean, then make
+Navigate to Clue-Reasoner directory  
+run the following commands:  
+```
+python  
+import ClueGame  
+game = ClueGame.ClueGame()  
+game.startGame()  
+```
+You can run multiple games as long as startGame is run before creating the next game
