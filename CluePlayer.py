@@ -31,6 +31,14 @@ class CluePlayer:
         if (self.type == "reasoner"):
             guess = self.makeMoveReasoner(self.clauses,self.playerHand) 
             return guess
+        else:
+            print "See start of game for card names. Please be exact"
+            guess = []
+            guess.append(raw_input("Suspect: "))
+            guess.append(raw_input("Weapon: "))
+            guess.append(raw_input("Room: "))
+            guess.append(raw_input("s for suggest, a for accuse: "))
+            return guess
         return None
 
     # Initialize important variables
