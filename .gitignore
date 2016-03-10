@@ -1,6 +1,7 @@
 .DS_Store
 *.o
-
+*.pyc
+query.cnf
 zchaff64/libsat.a
 zchaff64/zchaff
 zchaff64/zchaff_c_wrapper.cpp

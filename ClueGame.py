@@ -20,7 +20,7 @@ class ClueGame:
         caseFile.append(players[random.randint(0,len(players)-1)])
         caseFile.append(weapons[random.randint(0,len(weapons)-1)])
         caseFile.append(rooms[random.randint(0,len(suspects)-1)])
-        print caseFile
+        print "case file:",caseFile
 
         del cards[cards.index(caseFile[0])]
         del cards[cards.index(caseFile[1])]
@@ -28,10 +28,10 @@ class ClueGame:
 
         for i in xrange(0, numPlayers):
             self.hands[i] = []
-            
+
         for j in xrange(0,len(cards)):
             self.hands[j%numPlayers].append(cards[j])
-           
+            
         for k in xrange(0, numPlayers):
             self.playerReasoners.append(CluePlayer.CluePlayer(players[k],self.hands[k],"reasoner"))
 

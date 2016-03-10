@@ -21,7 +21,7 @@ class CluePlayer:
         self.type = type
         self.clauses = self.iClauses()
         self.clauses.extend(self.hand(self.name,hand))
-        print self.playerHand
+        print self.name, ": ", self.playerHand
         
     def makeMove(self):
         suspects = ClueGame.suspects
