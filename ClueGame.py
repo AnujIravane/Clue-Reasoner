@@ -10,14 +10,14 @@ cards = suspects + weapons + rooms
 numPlayers = 6
 # Initialize important variables
 class ClueGame:
-    def __init__(self, totalPlayers=6):
-    	if (totalPlayers < 1) or (totalPlayers > 6):
+    def __init__(self, humans, reasoners=6):
+    	if (humans + reasoners < 1) or (humans + reasoners > 6):
     		print "please enter between 1 and 6 players"
     		exit(10)
     	global numPlayers
         self.playerReasoners = []
         self.playerTurn = 0
-        numPlayers = totalPlayers
+        numPlayers = humans + reasoners
         cards = suspects + weapons + rooms
         random.shuffle(cards)
         self.hands = {}
@@ -39,7 +39,10 @@ class ClueGame:
         cards = suspects + weapons + rooms
             
         for k in xrange(0, numPlayers):
-            self.playerReasoners.append(CluePlayer.CluePlayer(players[k],self.hands[k],"reasoner"))
+        	if k < humans:
+        		self.playerReasoners.append(CluePlayer.CluePlayer(players[k], self.hands[k], "human"))
+        	else:
+            	self.playerReasoners.append(CluePlayer.CluePlayer(players[k],self.hands[k],"reasoner"))
 
     def startGame(self):
         while (self.playNextTurn()):
@@ -66,11 +69,15 @@ class ClueGame:
             for j in range(0,numPlayers-1):
                 if not(refuteResult is None):
                     if (j==self.playerTurn):
-                        self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,refuteResult)
+                    	if(self.playerReasoners[j].type == "reasoner"):
+                        	self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,refuteResult)
                     else:
-                        self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,None)
+
+                    	if(self.playerReasoners[j].type == "reasoner"):
+                        	self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,None)
                 else:
-                    self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],None,None)
+                	if(self.playerReasoners[j].type == "reasoner"):
+                    	self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],None,None)
         else:
             isCorrect = True
             for accusedCards in guess[0:-1]:
