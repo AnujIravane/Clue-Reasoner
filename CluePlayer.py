@@ -14,14 +14,15 @@ cards = suspects + weapons + rooms
 
 class CluePlayer:
         
-    def __init__(self,name,hand,type):
+    def __init__(self,name,hand,type,areHumans):
         self.falseAccuse = False
         self.playerHand = hand
         self.name = name
         self.type = type
         self.clauses = self.iClauses()
         self.clauses.extend(self.hand(self.name,hand))
-        print self.name, ": ", self.playerHand
+        if (not areHumans or self.type == "human"):
+            print self.name, ": ", self.playerHand
         
     def makeMove(self):
         suspects = ClueGame.suspects
@@ -32,6 +33,7 @@ class CluePlayer:
             guess = self.makeMoveReasoner(self.clauses,self.playerHand) 
             return guess
         elif (not self.falseAccuse):
+            print self.name + "'s turn"
             print "See start of game for card names. Please be exact"
             guess = []
             line = ""
@@ -54,6 +56,12 @@ class CluePlayer:
             return guess
         return None
     # end makeMove
+
+    def checkHuman(self,accusedCards):
+        for card in accusedCards:
+            if card in self.playerHand:
+                return True
+        return False
 
     # Initialize important variables
 
@@ -164,7 +172,7 @@ class CluePlayer:
         self.clauses.extend(clauses)
     # end accuse
 
-    def refute(self,rcards):
+    def refute(self,rcards,personToRefute):
         if (self.type == "reasoner"):
             temp = range(0,len(self.playerHand))
             random.shuffle(temp)
@@ -180,7 +188,7 @@ class CluePlayer:
             if (len(options) == 1):
                 return options[0]
             if (options != []):
-                print "Pick a card to refute: ",options
+                print "Pick a card to refute" + personToRefute + "'s guess: ",options
                 cardToRefute = 5
                 while (cardToRefute >=len(options) and options != []):
                     cardToRefute = int(raw_input("Which card do you want to refute (1,2,or 3)? ")) - 1
