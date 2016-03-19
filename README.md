@@ -6,7 +6,7 @@ Term project for EECS 371
 
 ## Installation
 
-Requires [zchaff](https://www.princeton.edu/~chaff/zchaff.html)  
+Requires [python](https://www.python.org/downloads/), [zchaff](https://www.princeton.edu/~chaff/zchaff.html)  
 The zchaff installation directory is included in this repository  
 Move into the directory, and run make  
 Copy the zchaff executable into your path (echo $PATH to find directories on path)  
@@ -15,14 +15,14 @@ Copy the zchaff executable into your path (echo $PATH to find directories on pat
 ## Usage
 
 Navigate to Clue-Reasoner directory  
-run the following commands:  
+run the following commands to start the default game:  
 ```
 python  
 import ClueGame  
 game = ClueGame.ClueGame()  
 game.startGame()  
 ```
-You can create and run multiple games as long as startGame() is called on the previous game before creating the next game.  
+You can create and run multiple games. However, after creating one game, you must either call `startGame()` or `reset()` before creating the next game.  
 You can specify how many players to include in the game (between 2 and 6, inclusive) by passing the number to ClueGame().  
 The default number of reasoners for a game is 6. Example of altering human and reasoner number:  
 `game= ClueGame.ClueGame(1,4)`  
