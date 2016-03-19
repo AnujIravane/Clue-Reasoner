@@ -10,21 +10,30 @@ cards = suspects + weapons + rooms
 numPlayers = 6
 # Initialize important variables
 class ClueGame:
-    def __init__(self, totalPlayers=6):
-    	if (totalPlayers < 1) or (totalPlayers > 6):
-    		print "please enter between 1 and 6 players"
-    		exit(10)
+    def __init__(self, humans=0, reasoners=6):
+    	while (humans + reasoners < 1) or (humans + reasoners > 6):
+            print "please enter between 1 and 6 total players"
+            humans = int(raw_input("Human players: "))
+            reasoners = int(raw_input("Reasoners: "))
     	global numPlayers
         self.playerReasoners = []
         self.playerTurn = 0
-        numPlayers = totalPlayers
+        numPlayers = humans + reasoners
         cards = suspects + weapons + rooms
         random.shuffle(cards)
         self.hands = {}
         caseFile.append(suspects[random.randint(0,len(suspects)-1)])
         caseFile.append(weapons[random.randint(0,len(weapons)-1)])
         caseFile.append(rooms[random.randint(0,len(suspects)-1)])
-        print "case file:",caseFile
+
+        areHumans = False
+        if (humans == 0):
+            print "case file:",caseFile
+        else:
+            areHumans = True
+            print "Suspects: ", suspects
+            print "Weapons: ", weapons
+            print "Rooms: ", rooms
 
         del cards[cards.index(caseFile[0])]
         del cards[cards.index(caseFile[1])]
@@ -39,21 +48,33 @@ class ClueGame:
         cards = suspects + weapons + rooms
             
         for k in xrange(0, numPlayers):
-            self.playerReasoners.append(CluePlayer.CluePlayer(players[k],self.hands[k],"reasoner"))
+            if (k < humans):
+                self.playerReasoners.append(CluePlayer.CluePlayer(players[k], self.hands[k], "human",areHumans))
+            else:
+                self.playerReasoners.append(CluePlayer.CluePlayer(players[k],self.hands[k],"reasoner",areHumans))
+
 
     def startGame(self):
+        turns = 0
         while (self.playNextTurn()):
+            turns = turns + 1
             self.playerTurn = (self.playerTurn + 1)%numPlayers
+        self.reset()
+        print "Won in ",turns," moves"
+
+    def reset(self):
         del caseFile[:]
     
     def playNextTurn(self):
+        while (self.playerReasoners[self.playerTurn].falseAccuse):
+            self.playerTurn = (self.playerTurn + 1)%numPlayers
         guess = self.playerReasoners[self.playerTurn].makeMove()
         index = (self.playerTurn + 1) % numPlayers
         if (guess[-1] == "s"):
             refuteResult = None
             didRefute = False
             while (index != self.playerTurn):
-                refuteResult = self.playerReasoners[index].refute(guess[0:3])
+                refuteResult = self.playerReasoners[index].refute(guess[0:3],self.playerReasoners[self.playerTurn].name)
                 if not(refuteResult is None):
                     didRefute = True
                     break
@@ -63,15 +84,22 @@ class ClueGame:
             else:
                 print self.playerReasoners[self.playerTurn].name + " SUGGESTS " + guess[0] + " killed with a " + guess[1] + " in the " + guess[2] + ". Not refuted."
 
-            for j in range(0,numPlayers-1):
+            for j in range(0,numPlayers):
                 if not(refuteResult is None):
                     if (j==self.playerTurn):
-                        self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,refuteResult)
+                        if(self.playerReasoners[j].type == "reasoner"):
+                            self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,refuteResult)
                     else:
-                        self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,None)
+
+                        if(self.playerReasoners[j].type == "reasoner"):
+                            self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],self.playerReasoners[index].name,None)
                 else:
-                    self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],None,None)
+                    if(self.playerReasoners[j].type == "reasoner"):
+                        self.playerReasoners[j].suggest(self.playerReasoners[self.playerTurn].name,guess[0],guess[1],guess[2],None,None)
         else:
+            if (self.playerReasoners[self.playerTurn].type == "human" and self.playerReasoners[self.playerTurn].checkHuman(guess[0:3])):
+                print "Making an accusation with a card in your hand is not smart. Turn lost."
+                return True
             isCorrect = True
             for accusedCards in guess[0:-1]:
                 if not(accusedCards in caseFile):
@@ -85,6 +113,7 @@ class ClueGame:
                 return False
             else:
                 print self.playerReasoners[self.playerTurn].name + " ACCUSES " + guess[0] + " killed with a " + guess[1] + " in the " + guess[2] + ". WRONG GUESS"
+                self.playerReasoners[self.playerTurn].falseAccuse = True
         return True
 
 

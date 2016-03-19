@@ -14,32 +14,54 @@ cards = suspects + weapons + rooms
 
 class CluePlayer:
         
-    def __init__(self,name,hand,type):
-        # do nothing
+    def __init__(self,name,hand,type,areHumans):
+        self.falseAccuse = False
         self.playerHand = hand
         self.name = name
         self.type = type
         self.clauses = self.iClauses()
         self.clauses.extend(self.hand(self.name,hand))
-        print self.name, ": ", self.playerHand
+        if (not areHumans or self.type == "human"):
+            print self.name, ": ", self.playerHand
         
     def makeMove(self):
         suspects = ClueGame.suspects
         weapons = ClueGame.weapons
         rooms = ClueGame.rooms
         players = ClueGame.players
-        if (self.type == "reasoner"):
+        if (self.type == "reasoner" and not self.falseAccuse):
             guess = self.makeMoveReasoner(self.clauses,self.playerHand) 
             return guess
-        else:
+        elif (not self.falseAccuse):
+            print self.name + "'s turn"
             print "See start of game for card names. Please be exact"
             guess = []
-            guess.append(raw_input("Suspect: "))
-            guess.append(raw_input("Weapon: "))
-            guess.append(raw_input("Room: "))
-            guess.append(raw_input("s for suggest, a for accuse: "))
+            line = ""
+            while (line not in suspects):
+                line = raw_input("Suspect: ")
+            guess.append(line)
+            line = ""
+            while (line not in weapons):
+                line = raw_input("Weapon: ")
+            guess.append(line)
+            line = ""
+            while (line not in rooms):
+                line = raw_input("Room: ")
+            guess.append(line)
+            line = ""
+            while (line != "s" and line != "a"):
+                line = raw_input("s for suggest, a for accuse: ")
+            guess.append(line)
+            
             return guess
         return None
+    # end makeMove
+
+    def checkHuman(self,accusedCards):
+        for card in accusedCards:
+            if card in self.playerHand:
+                return True
+        return False
 
     # Initialize important variables
 
@@ -150,15 +172,30 @@ class CluePlayer:
         self.clauses.extend(clauses)
     # end accuse
 
-    def refute(self,rcards):
-        temp = range(0,len(self.playerHand))
-        random.shuffle(temp)
-        for i in temp:
+    def refute(self,rcards,personToRefute):
+        if (self.type == "reasoner"):
+            temp = range(0,len(self.playerHand))
+            random.shuffle(temp)
+            for i in temp:
+                for card in rcards:
+                    if (self.playerHand[i] == card):
+                        return card
+        else:
+            options = []
             for card in rcards:
-                if (self.playerHand[i] == card):
-                    return card
-        return None
+                if (card in self.playerHand):
+                    options.append(card)
+            if (len(options) == 1):
+                return options[0]
+            if (options != []):
+                print "Pick a card to refute" + personToRefute + "'s guess: ",options
+                cardToRefute = 5
+                while (cardToRefute >=len(options) and options != []):
+                    cardToRefute = int(raw_input("Which card do you want to refute (1,2,or 3)? ")) - 1
+                return options[cardToRefute]
 
+        return None
+    # end refute
     
     def makeMoveReasoner(self,clauses,hand):
         global players, suspects, weapons, rooms, locations, caseFile
